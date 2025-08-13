@@ -1,28 +1,16 @@
-# --- Python / build ---
+﻿# Python
+.venv/
 __pycache__/
 *.py[cod]
-*.so
-*.egg-info/
-dist/
-build/
-
-# --- Virtual envs ---
-.venv/
-venv/
-env/
-
-# --- OS noise ---
-.DS_Store
-Thumbs.db
-
-# --- Secrets / env ---
+*.log
 .env
 
-# --- Local data & caches ---
-data/portfolio_samples/_cache_last_portfolio.csv
-data/portfolio_samples/*.xlsx
-data/portfolio_samples/*.xls
-data/portfolio_samples/*.csv
+# Local data & artifacts
+data/
+*.csv
+*.xlsx
 
-# keep folder even if empty
-!data/portfolio_samples/.gitkeep
+# Frontend (later)
+node_modules/
+dist/
+build/
