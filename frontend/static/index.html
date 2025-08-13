@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Finsight Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 16px; }
+      table { border-collapse: collapse; width: 100%; max-width: 1200px; }
+      th, td { border: 1px solid #ddd; padding: 8px; }
+      th { background: #f5f5f5; text-align: left; }
+      tr:nth-child(even) { background: #fafafa; }
+      .muted { color: #777; }
+      .error { color: #b00020; margin: 8px 0; }
+    </style>
+  </head>
+  <body>
+    <h2>Finsight Portfolio</h2>
+    <div id="status" class="muted">Loading…</div>
+
+    <table id="tbl" aria-label="Portfolio table">
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>Company</th>
+          <th>Qty</th>
+          <th>Sector</th>
+          <th>Exec Price</th>
+          <th>Current</th>
+          <th>Daily %</th>
+          <th>Since Traded %</th>
+          <th>Market Value</th>
+          <th>PnL %</th>
+        </tr>
+      </thead>
+      <tbody id="rows">
+        <!-- Rows will be injected here -->
+      </tbody>
+    </table>
+
+    <script>
+      async function load() {
+        const status = document.getElementById('status');
+        const tbody = document.getElementById('rows');
+        try {
+          // relative path keeps it same-origin with the API
+          const res = await fetch('/portfolio');
+          if (!res.ok) throw new Error('Failed to fetch /portfolio: ' + res.status);
+          const data = await res.json();
+          const rows = data.positions || [];
+          status.textContent = rows.length ? `Loaded ${rows.length} rows` : 'No data yet — upload via /docs';
+
+          tbody.innerHTML = '';
+          for (const r of rows) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${r.ticker ?? '—'}</td>
+              <td>${r.company ?? '—'}</td>
+              <td>${r.qty ?? '—'}</td>
+              <td>${r.sector ?? '—'}</td>
+              <td>${r.exec_price ?? '—'}</td>
+              <td>${r.current_price ?? '—'}</td>
+              <td>${r.daily_change_pct ?? '—'}</td>
+              <td>${r.since_traded_pct ?? '—'}</td>
+              <td>${(r.market_value ?? '—')}</td>
+              <td>${(r.pnl_pct ?? '—')}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+        } catch (err) {
+          status.className = 'error';
+          status.textContent = 'Error: ' + err.message;
+        }
+      }
+      load();
+    </script>
+  </body>
+</html>

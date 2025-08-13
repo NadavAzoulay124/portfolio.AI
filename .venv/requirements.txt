@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+pandas
+openpyxl            # for reading Excel
+yfinance
+langchain
+langchain-openai
+faiss-cpu
+duckduckgo-search
+tenacity
